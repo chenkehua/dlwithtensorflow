@@ -1,0 +1,40 @@
+cmake_minimum_required(VERSION 3.10)
+project(MyTextRecognition)
+
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(OPENCV_DIR "/paddle-infer/opencv-3.4.7" CACHE STRING "OpenCV installation directory")
+# Add source files
+set(SOURCE_FILES
+    main.cpp
+    text_angle_cls.cpp
+    text_det.cpp
+    text_rec.cpp
+)
+
+find_package(OpenCV REQUIRED PATHS ${OPENCV_DIR}/build/ NO_DEFAULT_PATH)
+
+set(DEPS ${DEPS} ${OpenCV_LIBS})
+# Add header files (for include directories)
+include_directories(
+    /paddle-infer/20240510/paddle_openblas/paddle_inference/third_party/install/onnxruntime/include
+    /paddle-infer/opencv-3.4.7/include
+)
+
+# Set library paths for ONNXRuntime and OpenCV
+set(LIBRARY_PATHS
+    /paddle-infer/20240510/paddle_openblas/paddle_inference/third_party/install/onnxruntime/lib
+    /paddle-infer/opencv-3.4.7/lib
+)
+include_directories(${OpenCV_INCLUDE_DIRS})
+
+set(DEPS ${DEPS} ${OpenCV_LIBS})
+# Add executable
+add_executable(${PROJECT_NAME} ${SOURCE_FILES})
+
+# Link libraries
+target_link_libraries(${PROJECT_NAME}
+    /paddle-infer/20240510/paddle_openblas/paddle_inference/third_party/install/onnxruntime/lib/libonnxruntime.so
+    # Add other OpenCV libraries as needed
+)
